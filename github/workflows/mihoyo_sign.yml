@@ -1,0 +1,26 @@
+name: Mihoyo Daily Sign
+
+on:
+  schedule:
+    - cron: '0 22 * * *'   # 每天 UTC 22:00 (北京时间 06:00) 运行
+  workflow_dispatch:        # 允许手动触发
+
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run sign script
+        run: python main.py
+        env:
+          PROFILES: ${{ secrets.PROFILES }}
